@@ -25,6 +25,7 @@ namespace XNodeEditor {
             XNode.Node node = property.serializedObject.targetObject as XNode.Node;
             XNode.NodePort port = node.GetPort(property.name);
             PropertyField(property, label, port, includeChildren);
+           
         }
 
         /// <summary> Make a field for a serialized property. Manual node port override. </summary>
@@ -37,8 +38,17 @@ namespace XNodeEditor {
             if (property == null) throw new NullReferenceException();
 
             // If property is not a port, display a regular property field
-            if (port == null) EditorGUILayout.PropertyField(property, label, includeChildren, GUILayout.MinWidth(30));
+            if (port == null)
+            {
+               // if (NodeEditorWindow.current.zoom <= NodeEditorPreferences.GetSettings().zoomCull)
+                {
+                    EditorGUILayout.PropertyField(property, label, includeChildren, GUILayout.MinWidth(30));
+                }
+            }
+
+           
             else {
+                
                 Rect rect = new Rect();
 
                 List<PropertyAttribute> propertyAttributes = NodeEditorUtilities.GetCachedPropertyAttribs(port.node.GetType(), property.name);

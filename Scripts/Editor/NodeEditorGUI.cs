@@ -27,10 +27,15 @@ namespace XNodeEditor {
             ValidateGraphEditor();
             Controls();
 
-            DrawGrid(position, zoom, panOffset);
-            DrawConnections();
+            if (zoom < NodeEditorPreferences.GetSettings().zoomCull)
+            {
+                DrawGrid(position, zoom, panOffset);
+            }
+            
+            
             DrawDraggedConnection();
-            DrawNodes();
+            DrawNodes(zoom);
+            DrawConnections();
             DrawSelectionBox();
             DrawTooltip();
             graphEditor.OnGUI();
@@ -151,6 +156,15 @@ namespace XNodeEditor {
             polyLineTempArray[1].x = p1.x;
             polyLineTempArray[1].y = p1.y;
             Handles.DrawAAPolyLine(thickness, polyLineTempArray);
+          //  Handles.DrawPolyLine( polyLineTempArray);
+        }
+        
+        static void DrawPolyLineNonAlloc( Vector2 p0, Vector2 p1) {
+            polyLineTempArray[0].x = p0.x;
+            polyLineTempArray[0].y = p0.y;
+            polyLineTempArray[1].x = p1.x;
+            polyLineTempArray[1].y = p1.y;
+            Handles.DrawPolyLine( polyLineTempArray);
         }
 
         /// <summary> Draw a bezier from output to input in grid coordinates </summary>
@@ -328,6 +342,7 @@ namespace XNodeEditor {
 
         /// <summary> Draws all connections </summary>
         public void DrawConnections() {
+            
             Vector2 mousePos = Event.current.mousePosition;
             List<RerouteReference> selection = preBoxSelectionReroute != null ? new List<RerouteReference>(preBoxSelectionReroute) : new List<RerouteReference>();
             hoveredReroute = new RerouteReference();
@@ -397,7 +412,7 @@ namespace XNodeEditor {
             if (Event.current.type != EventType.Layout && currentActivity == NodeActivity.DragGrid) selectedReroutes = selection;
         }
 
-        private void DrawNodes() {
+        private void DrawNodes(float zoom) {
             Event e = Event.current;
             if (e.type == EventType.Layout) {
                 selectionCache = new List<UnityEngine.Object>(Selection.objects);
@@ -489,7 +504,13 @@ namespace XNodeEditor {
 
                 //Draw node contents
                 nodeEditor.OnHeaderGUI();
-                nodeEditor.OnBodyGUI();
+                
+                {
+                    //nodeEditor.PassZoom(NodeEditorWindow.current.zoom);
+                    nodeEditor.OnBodyGUI();
+                }
+
+               
 
                 //If user changed a value, notify other scripts through onUpdateNode
                 if (EditorGUI.EndChangeCheck()) {

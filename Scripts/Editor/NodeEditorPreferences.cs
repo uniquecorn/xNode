@@ -32,6 +32,7 @@ namespace XNodeEditor {
             [UnityEngine.Serialization.FormerlySerializedAs("zoomOutLimit")]
             public float maxZoom = 5f;
             public float minZoom = 1f;
+            public float zoomCull = 4f;
             public Color32 tintColor = new Color32(90, 97, 105, 255);
             public Color32 highlightColor = new Color32(255, 255, 255, 255);
             public bool gridSnap = true;
@@ -139,6 +140,7 @@ namespace XNodeEditor {
             EditorGUI.indentLevel++;
             settings.maxZoom = EditorGUILayout.FloatField(new GUIContent("Max", "Upper limit to zoom"), settings.maxZoom);
             settings.minZoom = EditorGUILayout.FloatField(new GUIContent("Min", "Lower limit to zoom"), settings.minZoom);
+            settings.zoomCull = EditorGUILayout.FloatField(new GUIContent("Cull", "cull limit"), settings.zoomCull);
             EditorGUI.indentLevel--;
             settings.gridLineColor = EditorGUILayout.ColorField("Color", settings.gridLineColor);
             settings.gridBgColor = EditorGUILayout.ColorField(" ", settings.gridBgColor);
