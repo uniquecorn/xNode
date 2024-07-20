@@ -57,33 +57,10 @@ namespace XNodeEditor
             string[] excludes = { "m_Script", "graph", "position", "ports" };
 
 #if ODIN_INSPECTOR
-            try
+            using(var propertyTree = PropertyTree.Create(serializedObject))
             {
-#if ODIN_INSPECTOR_3
-                objectTree.BeginDraw( true );
-#else
-                InspectorUtilities.BeginDrawPropertyTree(objectTree, true);
-#endif
+                propertyTree.Draw();
             }
-            catch ( ArgumentNullException )
-            {
-#if ODIN_INSPECTOR_3
-                objectTree.EndDraw();
-#else
-                InspectorUtilities.EndDrawPropertyTree(objectTree);
-#endif
-                NodeEditor.DestroyEditor(this.target);
-                return;
-            }
-
-            GUIHelper.PushLabelWidth( 84 );
-            objectTree.Draw( true );
-#if ODIN_INSPECTOR_3
-            objectTree.EndDraw();
-#else
-            InspectorUtilities.EndDrawPropertyTree(objectTree);
-#endif
-            GUIHelper.PopLabelWidth();
 #else
 
 
