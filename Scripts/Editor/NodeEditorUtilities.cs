@@ -274,8 +274,8 @@ namespace XNodeEditor {
         }
 
         /// Inherits from EndNameAction, must override EndNameAction.Action
-        public class DoCreateCodeFile : UnityEditor.ProjectWindowCallback.EndNameEditAction {
-            public override void Action(int instanceId, string pathName, string resourceFile) {
+        public class DoCreateCodeFile : UnityEditor.ProjectWindowCallback.AssetCreationEndAction {
+            public override void Action(EntityId instanceId, string pathName, string resourceFile) {
                 Object o = CreateScript(pathName, resourceFile);
                 ProjectWindowUtil.ShowCreatedAsset(o);
             }
